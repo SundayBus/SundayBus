@@ -4,11 +4,10 @@ namespace SundayBus
 {
     public class SubscribeMessage : ISubscribeMessage
     {
-        public SubscribeMessage()
-        { }
-
-        public object Message { get; }
-
+        public SubscribeMessage(Type messageType)
+        {
+            MessageType = messageType;
+        }
         public Type MessageType { get; }
     }
 }

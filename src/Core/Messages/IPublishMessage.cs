@@ -2,8 +2,9 @@ using System;
 
 namespace SundayBus
 {
-    public interface ISubscribeMessage : IBusMessage
+    public interface IPublishMessage : IBusMessage
     {
+        object Message { get; }
         Type MessageType { get; }
     }
 }
