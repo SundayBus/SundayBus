@@ -9,7 +9,9 @@ namespace SundayBus
         public Port(ISourceBlock<IBusMessage> fromBus, ITargetBlock<IInternalBusMessage> toBus)
         {
             FromBus = fromBus;
-            ToBus = new TransformBlock<IBusMessage, IInternalBusMessage>(m => new InternalBusMessage(this, m));
+            var tr = new TransformBlock<IBusMessage, IInternalBusMessage>(m => new InternalBusMessage(this, m));
+            tr.LinkTo(toBus);
+            ToBus = tr;
         }
 
         public ISourceBlock<IBusMessage> FromBus { get; }
