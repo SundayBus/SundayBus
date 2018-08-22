@@ -1,10 +1,11 @@
 using System;
+using System.Threading.Tasks.Dataflow;
 
 namespace SundayBus
 {
     public interface IPort
     {
-        void Subscribe<T>(Action<T> callback);
-        void Publish<T>(T message);
+        ISourceBlock<IBusMessage> FromBus { get; }
+        ITargetBlock<IBusMessage> ToBus { get; }
     }
 }

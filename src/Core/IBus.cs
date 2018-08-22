@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace SundayBus
 {
     public interface IBus
     {
-        IPort GetPort();
+        Task<IPort> GetPort();
     }
 }

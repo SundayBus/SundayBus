@@ -2,7 +2,7 @@ namespace SundayBus
 {
     public interface IInternalBusMessage
     {
-        PortController Source { get; }
+        IPort Source { get; }
         IBusMessage Message { get; }
     }
 }

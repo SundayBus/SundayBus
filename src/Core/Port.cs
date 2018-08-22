@@ -6,37 +6,13 @@ namespace SundayBus
 {
     public class Port : IPort
     {
-        private readonly ISourceBlock<IBusMessage> _fromBus;
-        private readonly ITargetBlock<IBusMessage> _toBus;
-        private Dictionary<Type, Action<object>> _actions = new Dictionary<Type, Action<object>>();
-
-        public Port(ISourceBlock<IBusMessage> fromBus, ITargetBlock<IBusMessage> toBus)
+        public Port(ISourceBlock<IBusMessage> fromBus, ITargetBlock<IInternalBusMessage> toBus)
         {
-            _fromBus = fromBus;
-            _toBus = toBus;
-        }
-        public void Publish<T>(T message)
-        {
-            _toBus.Post(new PublishMessage(message, typeof(T)));
+            FromBus = fromBus;
+            ToBus = new TransformBlock<IBusMessage, IInternalBusMessage>(m => new InternalBusMessage(this, m));
         }
 
-        public void Subscribe<T>(Action<T> callback)
-        {
-            _actions[typeof(T)] = o => callback((T) o);
-            _toBus.Post(new SubscribeMessage(typeof(T)));
-        }
-
-        private void Process(IBusMessage msg)
-        {
-            switch (msg)
-            {
-                case IPublishMessage pub:
-                    if (_actions.TryGetValue(pub.MessageType, out var a))
-                    {
-                        a(pub.Message);
-                    }
-                    break;
-            }
-        }
+        public ISourceBlock<IBusMessage> FromBus { get; }
+        public ITargetBlock<IBusMessage> ToBus { get; }
     }
 }
